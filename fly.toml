@@ -1,0 +1,19 @@
+# Fly.io deploy config. Deploy from THIS folder with:  fly launch --copy-config
+# (then `fly deploy` for updates). Machines AUTO-STOP when idle, so an idle server
+# costs ~nothing; it cold-starts (a few seconds) on the next render request.
+app = "diguz-render"
+primary_region = "cdg"   # change to your nearest region (e.g. iad, lhr, fra)
+
+[build]
+  dockerfile = "Dockerfile"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = "stop"   # stop when idle → near-zero cost
+  auto_start_machines = true    # wake on the next request
+  min_machines_running = 0
+
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "1gb"                # comfortable for 4K-in / 1080p-out ffmpeg
